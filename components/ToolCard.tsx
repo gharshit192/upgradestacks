@@ -26,8 +26,19 @@ export default function ToolCard({ connection }: Props) {
 
       {/* Logo */}
       <div className="w-11 h-11 rounded-xl bg-gray-50 flex items-center justify-center
-                      text-2xl flex-shrink-0 group-hover:bg-orange-50 transition-colors">
-        {tool.logo_emoji || '🔧'}
+                      flex-shrink-0 group-hover:bg-orange-50 transition-colors overflow-hidden">
+        <img
+          src={`https://www.google.com/s2/favicons?domain=${new URL(tool.website_url).hostname}&sz=64`}
+          alt={tool.name}
+          className="w-8 h-8 object-contain"
+          onError={(e) => {
+            e.currentTarget.style.display = 'none'
+            e.currentTarget.parentElement!.innerHTML =
+              `<span class="text-lg font-bold text-orange-500">
+                ${tool.name.charAt(0)}
+              </span>`
+          }}
+        />
       </div>
 
       {/* Info */}
