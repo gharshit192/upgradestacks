@@ -23,7 +23,7 @@ export default function Footer() {
             </h3>
             <ul className="space-y-2 text-sm text-gray-400">
               <li><Link href="/category/creative" className="hover:text-accent transition-colors">Creative</Link></li>
-              <li><Link href="/category/tech" className="hover:text-accent transition-colors">Tech & Dev</Link></li>
+              <li><Link href="/category/tech-and-dev" className="hover:text-accent transition-colors">Tech & Dev</Link></li>
               <li><Link href="/category/finance" className="hover:text-accent transition-colors">Finance</Link></li>
               <li><Link href="/category/business" className="hover:text-accent transition-colors">Business</Link></li>
               <li><Link href="/category/health" className="hover:text-accent transition-colors">Health</Link></li>
