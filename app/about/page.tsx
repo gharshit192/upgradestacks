@@ -52,16 +52,32 @@ export default function AboutPage() {
 
           {/* Creator */}
           <section>
-            <h2 className="font-display font-bold text-2xl text-primary mb-3">Made By</h2>
+            <h2 className="font-display font-bold text-2xl text-primary mb-3">About the Founder</h2>
             <div className="bg-gray-50 rounded-xl p-6 mt-4">
-              <h3 className="font-display font-bold text-lg mb-2">Harshit Gupta</h3>
-              <p className="text-sm text-gray-600 mb-3">
-                [Add your bio here — what you do, your background, why you built this]
+              <h3 className="font-display font-bold text-lg mb-1">Harshit Gupta</h3>
+              <p className="text-accent text-sm font-semibold mb-3">Founder, UpgradeStacks</p>
+
+              <p className="text-sm text-gray-600 mb-4 leading-relaxed">
+                I built UpgradeStacks because I spent way too much time researching tools. Whether I was
+                switching jobs, learning a new skill, or starting a project, I'd end up in a rabbit hole
+                of tabs, reviews, and comparisons. I realized professionals shouldn't have to do this alone.
               </p>
-              <div className="flex gap-3">
-                <a href="#" className="text-accent text-sm hover:underline">Twitter</a>
-                <a href="#" className="text-accent text-sm hover:underline">LinkedIn</a>
+
+              <p className="text-sm text-gray-600 mb-4 leading-relaxed">
+                UpgradeStacks is my attempt to create a single place where professionals can discover proven
+                tool stacks verified by people who actually use them. No marketing fluff, just real tools that work.
+              </p>
+
+              <p className="text-sm text-gray-600 mb-4">
+                <strong>Background:</strong> IT professional passionate about productivity, tools, and helping
+                people work smarter. When I'm not building UpgradeStacks, you can find me exploring new tools,
+                writing about tech, or helping other builders ship faster.
+              </p>
+
+              <div className="flex gap-3 pt-2">
                 <a href="mailto:rohit.p@fretron.in" className="text-accent text-sm hover:underline">Email</a>
+                <span className="text-gray-300">•</span>
+                <span className="text-gray-500 text-sm">(Twitter & LinkedIn coming soon)</span>
               </div>
             </div>
           </section>
