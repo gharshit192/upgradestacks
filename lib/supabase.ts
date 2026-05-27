@@ -12,10 +12,18 @@ const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
 export const supabase = createClient(supabaseUrl, supabaseKey)
 
 // Server-side client with service role key (for API routes that write data)
-export const supabaseAdmin = createClient(
-  supabaseUrl,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-)
+// Lazy initialization to handle missing key during build
+let supabaseAdminInstance: any = null
+export const supabaseAdmin = new Proxy({} as any, {
+  get: (target, prop) => {
+    if (!supabaseAdminInstance) {
+      const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY
+      if (!serviceKey) throw new Error('SUPABASE_SERVICE_ROLE_KEY not configured')
+      supabaseAdminInstance = createClient(supabaseUrl, serviceKey)
+    }
+    return supabaseAdminInstance[prop]
+  },
+})
 
 
 // ── PROFESSIONS ──────────────────────────────────────────────────────
