@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UpgradeStacks — The Complete Stack for Every Type of Person</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --primary: #0f0e17;
+    --accent: #ff6b35;
+    --accent2: #4ecdc4;
+    --bg: #fafaf8;
+    --card: #ffffff;
+    --text: #0f0e17;
+    --muted: #6b7280;
+    --border: #e5e7eb;
+    --success: #10b981;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); }
+  h1,h2,h3,h4 { font-family: 'Sora', sans-serif; }
+
+  /* NAV */
+  nav {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(250,250,248,0.95); backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem; display: flex; align-items: center; justify-content: space-between;
+    height: 64px;
+  }
+  .logo { font-family: 'Sora', sans-serif; font-weight: 800; font-size: 1.3rem; color: var(--primary); display: flex; align-items: center; gap: 8px; text-decoration: none; }
+  .logo span { color: var(--accent); }
+  .nav-links { display: flex; gap: 2rem; align-items: center; }
+  .nav-links a { text-decoration: none; color: var(--muted); font-size: 0.9rem; font-weight: 500; transition: color 0.2s; }
+  .nav-links a:hover { color: var(--accent); }
+  .nav-cta { background: var(--accent); color: white; padding: 8px 20px; border-radius: 100px; font-size: 0.85rem; font-weight: 600; text-decoration: none; transition: opacity 0.2s; }
+  .nav-cta:hover { opacity: 0.85; }
+
+  /* PAGES */
+  .page { display: none; }
+  .page.active { display: block; }
+
+  /* HERO */
+  .hero {
+    padding: 6rem 2rem 4rem;
+    text-align: center;
+    background: linear-gradient(180deg, #fff8f5 0%, var(--bg) 100%);
+  }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: #fff3ee; border: 1px solid #ffd4c2; color: var(--accent);
+    padding: 6px 16px; border-radius: 100px; font-size: 0.8rem; font-weight: 600;
+    margin-bottom: 1.5rem;
+  }
+  .hero-badge::before { content: '⚡'; }
+  .hero h1 { font-size: clamp(2.5rem, 5vw, 4rem); font-weight: 800; line-height: 1.1; margin-bottom: 1.2rem; }
+  .hero h1 em { color: var(--accent); font-style: normal; }
+  .hero p { font-size: 1.15rem; color: var(--muted); max-width: 560px; margin: 0 auto 2.5rem; line-height: 1.7; }
+
+  /* SEARCH */
+  .search-wrap { max-width: 600px; margin: 0 auto 1rem; position: relative; }
+  .search-wrap input {
+    width: 100%; padding: 18px 140px 18px 24px;
+    border: 2px solid var(--border); border-radius: 100px;
+    font-size: 1rem; font-family: 'DM Sans', sans-serif;
+    background: white; outline: none; transition: border 0.2s;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+  }
+  .search-wrap input:focus { border-color: var(--accent); }
+  .search-wrap button {
+    position: absolute; right: 6px; top: 6px;
+    background: var(--accent); color: white;
+    border: none; padding: 12px 24px; border-radius: 100px;
+    font-weight: 600; font-size: 0.9rem; cursor: pointer; font-family: 'DM Sans', sans-serif;
+    transition: opacity 0.2s;
+  }
+  .search-wrap button:hover { opacity: 0.85; }
+  .search-hints { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-bottom: 3rem; }
+  .hint-chip {
+    background: white; border: 1px solid var(--border); padding: 6px 14px;
+    border-radius: 100px; font-size: 0.8rem; cursor: pointer; color: var(--muted);
+    transition: all 0.2s;
+  }
+  .hint-chip:hover { border-color: var(--accent); color: var(--accent); background: #fff8f5; }
+
+  /* STATS */
+  .stats-bar {
+    display: flex; justify-content: center; gap: 3rem;
+    padding: 2rem; background: var(--primary); color: white;
+  }
+  .stat { text-align: center; }
+  .stat-num { font-family: 'Sora', sans-serif; font-size: 1.8rem; font-weight: 800; color: var(--accent); }
+  .stat-label { font-size: 0.8rem; color: rgba(255,255,255,0.6); margin-top: 2px; }
+
+  /* CATEGORIES */
+  .section { padding: 4rem 2rem; max-width: 1100px; margin: 0 auto; }
+  .section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem; }
+  .section-title { font-size: 1.6rem; font-weight: 700; }
+  .see-all { color: var(--accent); text-decoration: none; font-size: 0.9rem; font-weight: 500; }
+
+  .cat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 1rem; }
+  .cat-card {
+    background: white; border: 1.5px solid var(--border); border-radius: 16px;
+    padding: 1.5rem 1rem; text-align: center; cursor: pointer;
+    transition: all 0.2s; text-decoration: none; color: var(--text);
+  }
+  .cat-card:hover { border-color: var(--accent); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(255,107,53,0.12); }
+  .cat-icon { font-size: 2rem; margin-bottom: 0.5rem; }
+  .cat-name { font-family: 'Sora', sans-serif; font-weight: 600; font-size: 0.9rem; margin-bottom: 4px; }
+  .cat-count { font-size: 0.75rem; color: var(--muted); }
+
+  /* FEATURED STACKS */
+  .stacks-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.25rem; }
+  .stack-card {
+    background: white; border: 1.5px solid var(--border); border-radius: 20px;
+    padding: 1.5rem; cursor: pointer; transition: all 0.2s;
+    position: relative; overflow: hidden;
+  }
+  .stack-card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: var(--accent);
+  }
+  .stack-card:hover { transform: translateY(-3px); box-shadow: 0 12px 32px rgba(0,0,0,0.08); border-color: var(--accent); }
+  .stack-card-header { display: flex; align-items: center; gap: 12px; margin-bottom: 1rem; }
+  .stack-avatar {
+    width: 48px; height: 48px; border-radius: 12px;
+    display: flex; align-items: center; justify-content: center; font-size: 1.5rem;
+    background: #fff3ee;
+  }
+  .stack-name { font-family: 'Sora', sans-serif; font-weight: 700; font-size: 1.05rem; }
+  .stack-meta { font-size: 0.8rem; color: var(--muted); margin-top: 2px; }
+  .stack-tools { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 1rem; }
+  .tool-pill {
+    background: var(--bg); border: 1px solid var(--border);
+    padding: 4px 10px; border-radius: 100px; font-size: 0.75rem; color: var(--muted);
+  }
+  .stack-footer { display: flex; align-items: center; justify-content: space-between; }
+  .stack-users { font-size: 0.8rem; color: var(--muted); }
+  .stack-users strong { color: var(--text); }
+  .view-btn {
+    background: var(--bg); border: 1.5px solid var(--border);
+    padding: 6px 14px; border-radius: 100px; font-size: 0.8rem; font-weight: 600;
+    cursor: pointer; transition: all 0.2s; font-family: 'DM Sans', sans-serif;
+  }
+  .view-btn:hover { background: var(--accent); color: white; border-color: var(--accent); }
+
+  /* HOW IT WORKS */
+  .how-section { background: var(--primary); padding: 4rem 2rem; }
+  .how-inner { max-width: 1100px; margin: 0 auto; }
+  .how-title { font-size: 1.8rem; font-weight: 700; color: white; text-align: center; margin-bottom: 3rem; }
+  .how-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.5rem; }
+  .how-card { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 1.5rem; }
+  .how-num { font-family: 'Sora', sans-serif; font-size: 2.5rem; font-weight: 800; color: var(--accent); margin-bottom: 0.5rem; }
+  .how-card h3 { color: white; font-size: 1rem; margin-bottom: 0.5rem; }
+  .how-card p { color: rgba(255,255,255,0.6); font-size: 0.85rem; line-height: 1.6; }
+
+  /* ── STACK PAGE ── */
+  .stack-page-hero {
+    background: linear-gradient(135deg, #0f0e17 0%, #1a1830 100%);
+    padding: 3rem 2rem;
+    color: white;
+  }
+  .back-btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    color: rgba(255,255,255,0.6); font-size: 0.85rem; cursor: pointer;
+    margin-bottom: 1.5rem; transition: color 0.2s; background: none; border: none; font-family: 'DM Sans', sans-serif;
+  }
+  .back-btn:hover { color: white; }
+  .stack-hero-inner { max-width: 1100px; margin: 0 auto; }
+  .stack-big-icon { font-size: 3.5rem; margin-bottom: 1rem; }
+  .stack-page-title { font-size: 2.2rem; font-weight: 800; margin-bottom: 0.5rem; }
+  .stack-page-desc { color: rgba(255,255,255,0.7); max-width: 600px; line-height: 1.7; margin-bottom: 1.5rem; }
+  .stack-page-meta { display: flex; gap: 1.5rem; flex-wrap: wrap; }
+  .meta-badge {
+    display: flex; align-items: center; gap: 6px;
+    background: rgba(255,255,255,0.1); padding: 6px 14px; border-radius: 100px;
+    font-size: 0.8rem; color: rgba(255,255,255,0.8);
+  }
+  .meta-badge strong { color: white; }
+
+  .stack-content { max-width: 1100px; margin: 0 auto; padding: 2rem; display: grid; grid-template-columns: 1fr 320px; gap: 2rem; }
+  .tools-section h2 { font-size: 1.2rem; margin-bottom: 1.2rem; color: var(--muted); text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.1em; }
+  .tool-category-block { margin-bottom: 2.5rem; }
+  .tool-category-label {
+    font-family: 'Sora', sans-serif; font-size: 1rem; font-weight: 700;
+    margin-bottom: 1rem; display: flex; align-items: center; gap: 8px;
+  }
+  .tool-card {
+    background: white; border: 1.5px solid var(--border); border-radius: 14px;
+    padding: 1.2rem 1.5rem; margin-bottom: 0.75rem; display: flex; align-items: center;
+    gap: 1rem; transition: all 0.2s;
+  }
+  .tool-card:hover { border-color: var(--accent); box-shadow: 0 4px 16px rgba(255,107,53,0.08); }
+  .tool-logo { width: 44px; height: 44px; border-radius: 10px; background: var(--bg); display: flex; align-items: center; justify-content: center; font-size: 1.4rem; flex-shrink: 0; }
+  .tool-info { flex: 1; }
+  .tool-name { font-weight: 700; font-size: 0.95rem; margin-bottom: 2px; }
+  .tool-desc { font-size: 0.82rem; color: var(--muted); line-height: 1.5; }
+  .tool-right { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; }
+  .tool-price { font-size: 0.78rem; font-weight: 600; color: var(--success); background: #f0fdf4; padding: 3px 10px; border-radius: 100px; }
+  .tool-price.paid { color: #7c3aed; background: #f5f3ff; }
+  .tool-link {
+    background: var(--accent); color: white; padding: 6px 14px;
+    border-radius: 100px; font-size: 0.78rem; font-weight: 600; text-decoration: none;
+    transition: opacity 0.2s; white-space: nowrap;
+  }
+  .tool-link:hover { opacity: 0.85; }
+  .importance-badge {
+    font-size: 0.7rem; padding: 2px 8px; border-radius: 100px;
+    background: #fff3ee; color: var(--accent); font-weight: 600;
+  }
+  .importance-badge.rec { background: #f0fdf4; color: var(--success); }
+  .importance-badge.opt { background: var(--bg); color: var(--muted); }
+
+  /* SIDEBAR */
+  .stack-sidebar { }
+  .sidebar-card {
+    background: white; border: 1.5px solid var(--border); border-radius: 16px;
+    padding: 1.5rem; margin-bottom: 1rem;
+  }
+  .sidebar-card h3 { font-size: 0.95rem; font-weight: 700; margin-bottom: 1rem; }
+  .share-btn {
+    width: 100%; padding: 12px; border-radius: 100px;
+    font-weight: 600; font-size: 0.9rem; cursor: pointer;
+    font-family: 'DM Sans', sans-serif; transition: all 0.2s; margin-bottom: 0.5rem;
+  }
+  .share-btn.primary { background: var(--accent); color: white; border: none; }
+  .share-btn.secondary { background: white; color: var(--text); border: 1.5px solid var(--border); }
+  .share-btn:hover { opacity: 0.85; }
+  .submit-form input, .submit-form select, .submit-form textarea {
+    width: 100%; padding: 10px 14px; border: 1.5px solid var(--border);
+    border-radius: 10px; font-family: 'DM Sans', sans-serif; font-size: 0.85rem;
+    margin-bottom: 0.75rem; outline: none; transition: border 0.2s;
+    background: var(--bg);
+  }
+  .submit-form input:focus, .submit-form select:focus, .submit-form textarea:focus { border-color: var(--accent); background: white; }
+  .submit-btn {
+    width: 100%; background: var(--primary); color: white; border: none;
+    padding: 12px; border-radius: 10px; font-weight: 600; font-size: 0.9rem;
+    cursor: pointer; font-family: 'DM Sans', sans-serif; transition: opacity 0.2s;
+  }
+  .submit-btn:hover { opacity: 0.85; }
+  .rating-row { display: flex; align-items: center; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid var(--border); font-size: 0.85rem; }
+  .rating-row:last-child { border: none; }
+  .rating-stars { color: #f59e0b; letter-spacing: 2px; }
+
+  /* FOOTER */
+  footer {
+    background: var(--primary); color: rgba(255,255,255,0.5);
+    text-align: center; padding: 2rem; font-size: 0.85rem; margin-top: 4rem;
+  }
+  footer strong { color: white; }
+
+  /* TOAST */
+  .toast {
+    position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%) translateY(100px);
+    background: var(--primary); color: white; padding: 12px 24px; border-radius: 100px;
+    font-size: 0.9rem; font-weight: 500; transition: transform 0.3s; z-index: 1000;
+  }
+  .toast.show { transform: translateX(-50%) translateY(0); }
+
+  @media (max-width: 768px) {
+    .stack-content { grid-template-columns: 1fr; }
+    .stats-bar { gap: 1.5rem; }
+    .nav-links { display: none; }
+    .hero h1 { font-size: 2rem; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="logo" onclick="showPage('home')" style="cursor:pointer">Upgrade<span>Stacks</span></a>
+  <div class="nav-links">
+    <a href="#" onclick="showPage('home')">Home</a>
+    <a href="#" onclick="showPage('stack')">Browse Stacks</a>
+    <a href="#">Submit Tool</a>
+    <a href="#">About</a>
+  </div>
+  <a class="nav-cta" href="#">Save My Stack</a>
+</nav>
+
+<!-- ════════════ HOME PAGE ════════════ -->
+<div id="page-home" class="page active">
+
+  <section class="hero">
+    <div class="hero-badge">5,000+ stacks live now</div>
+    <h1>The Complete <em>Stack</em><br>for Every Type of Person</h1>
+    <p>Find the exact tools, apps, and resources used by people in your profession — curated, rated, and verified by the community.</p>
+
+    <div class="search-wrap">
+      <input type="text" id="search-input" placeholder="Type your profession or goal... e.g. Graphic Designer" />
+      <button onclick="doSearch()">Find Stack →</button>
+    </div>
+
+    <div class="search-hints">
+      <span class="hint-chip" onclick="loadStack('graphic-designer')">🎨 Graphic Designer</span>
+      <span class="hint-chip" onclick="loadStack('ca-student')">📊 CA Student</span>
+      <span class="hint-chip" onclick="loadStack('youtuber')">🎬 YouTuber</span>
+      <span class="hint-chip" onclick="loadStack('developer')">💻 Developer</span>
+      <span class="hint-chip" onclick="loadStack('startup-founder')">🚀 Startup Founder</span>
+      <span class="hint-chip" onclick="loadStack('fitness-trainer')">💪 Fitness Trainer</span>
+    </div>
+  </section>
+
+  <div class="stats-bar">
+    <div class="stat"><div class="stat-num">5,200+</div><div class="stat-label">Stacks Available</div></div>
+    <div class="stat"><div class="stat-num">18,000+</div><div class="stat-label">Tools Listed</div></div>
+    <div class="stat"><div class="stat-num">94,000+</div><div class="stat-label">Monthly Users</div></div>
+    <div class="stat"><div class="stat-num">₹0</div><div class="stat-label">Always Free</div></div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <h2 class="section-title">Browse by Category</h2>
+      <a class="see-all" href="#">See all →</a>
+    </div>
+    <div class="cat-grid">
+      <div class="cat-card" onclick="loadStack('graphic-designer')">
+        <div class="cat-icon">🎨</div>
+        <div class="cat-name">Creative</div>
+        <div class="cat-count">340 stacks</div>
+      </div>
+      <div class="cat-card" onclick="loadStack('developer')">
+        <div class="cat-icon">💻</div>
+        <div class="cat-name">Tech & Dev</div>
+        <div class="cat-count">420 stacks</div>
+      </div>
+      <div class="cat-card" onclick="loadStack('ca-student')">
+        <div class="cat-icon">📊</div>
+        <div class="cat-name">Finance</div>
+        <div class="cat-count">280 stacks</div>
+      </div>
+      <div class="cat-card" onclick="loadStack('startup-founder')">
+        <div class="cat-icon">🚀</div>
+        <div class="cat-name">Business</div>
+        <div class="cat-count">390 stacks</div>
+      </div>
+      <div class="cat-card" onclick="loadStack('youtuber')">
+        <div class="cat-icon">🎬</div>
+        <div class="cat-name">Creator</div>
+        <div class="cat-count">220 stacks</div>
+      </div>
+      <div class="cat-card" onclick="loadStack('fitness-trainer')">
+        <div class="cat-icon">💪</div>
+        <div class="cat-name">Health</div>
+        <div class="cat-count">190 stacks</div>
+      </div>
+      <div class="cat-card">
+        <div class="cat-icon">📚</div>
+        <div class="cat-name">Education</div>
+        <div class="cat-count">310 stacks</div>
+      </div>
+      <div class="cat-card">
+        <div class="cat-icon">🏠</div>
+        <div class="cat-name">Lifestyle</div>
+        <div class="cat-count">150 stacks</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section" style="padding-top:0">
+    <div class="section-header">
+      <h2 class="section-title">🔥 Trending Stacks</h2>
+      <a class="see-all" href="#">See all →</a>
+    </div>
+    <div class="stacks-grid">
+      <div class="stack-card" onclick="loadStack('graphic-designer')">
+        <div class="stack-card-header">
+          <div class="stack-avatar">🎨</div>
+          <div>
+            <div class="stack-name">Graphic Designer</div>
+            <div class="stack-meta">Creative • India & Global</div>
+          </div>
+        </div>
+        <div class="stack-tools">
+          <span class="tool-pill">Figma</span>
+          <span class="tool-pill">Canva</span>
+          <span class="tool-pill">Adobe CC</span>
+          <span class="tool-pill">Behance</span>
+          <span class="tool-pill">+4 more</span>
+        </div>
+        <div class="stack-footer">
+          <div class="stack-users"><strong>3,240</strong> designers use this</div>
+          <button class="view-btn">View Stack →</button>
+        </div>
+      </div>
+
+      <div class="stack-card" onclick="loadStack('ca-student')">
+        <div class="stack-card-header">
+          <div class="stack-avatar">📊</div>
+          <div>
+            <div class="stack-name">CA Student</div>
+            <div class="stack-meta">Finance • India Specific</div>
+          </div>
+        </div>
+        <div class="stack-tools">
+          <span class="tool-pill">Tally</span>
+          <span class="tool-pill">Zerodha</span>
+          <span class="tool-pill">ClearTax</span>
+          <span class="tool-pill">MS Excel</span>
+          <span class="tool-pill">+5 more</span>
+        </div>
+        <div class="stack-footer">
+          <div class="stack-users"><strong>5,820</strong> CA students use this</div>
+          <button class="view-btn">View Stack →</button>
+        </div>
+      </div>
+
+      <div class="stack-card" onclick="loadStack('youtuber')">
+        <div class="stack-card-header">
+          <div class="stack-avatar">🎬</div>
+          <div>
+            <div class="stack-name">YouTuber</div>
+            <div class="stack-meta">Creator • India & Global</div>
+          </div>
+        </div>
+        <div class="stack-tools">
+          <span class="tool-pill">DaVinci Resolve</span>
+          <span class="tool-pill">TubeBuddy</span>
+          <span class="tool-pill">Canva</span>
+          <span class="tool-pill">+6 more</span>
+        </div>
+        <div class="stack-footer">
+          <div class="stack-users"><strong>2,110</strong> creators use this</div>
+          <button class="view-btn">View Stack →</button>
+        </div>
+      </div>
+
+      <div class="stack-card" onclick="loadStack('developer')">
+        <div class="stack-card-header">
+          <div class="stack-avatar">💻</div>
+          <div>
+            <div class="stack-name">Software Developer</div>
+            <div class="stack-meta">Tech • Global</div>
+          </div>
+        </div>
+        <div class="stack-tools">
+          <span class="tool-pill">VS Code</span>
+          <span class="tool-pill">GitHub</span>
+          <span class="tool-pill">Vercel</span>
+          <span class="tool-pill">Notion</span>
+          <span class="tool-pill">+8 more</span>
+        </div>
+        <div class="stack-footer">
+          <div class="stack-users"><strong>7,440</strong> developers use this</div>
+          <button class="view-btn">View Stack →</button>
+        </div>
+      </div>
+
+      <div class="stack-card" onclick="loadStack('startup-founder')">
+        <div class="stack-card-header">
+          <div class="stack-avatar">🚀</div>
+          <div>
+            <div class="stack-name">Startup Founder</div>
+            <div class="stack-meta">Business • India & Global</div>
+          </div>
+        </div>
+        <div class="stack-tools">
+          <span class="tool-pill">Notion</span>
+          <span class="tool-pill">Razorpay</span>
+          <span class="tool-pill">Framer</span>
+          <span class="tool-pill">Slack</span>
+          <span class="tool-pill">+9 more</span>
+        </div>
+        <div class="stack-footer">
+          <div class="stack-users"><strong>1,890</strong> founders use this</div>
+          <button class="view-btn">View Stack →</button>
+        </div>
+      </div>
+
+      <div class="stack-card" onclick="loadStack('fitness-trainer')">
+        <div class="stack-card-header">
+          <div class="stack-avatar">💪</div>
+          <div>
+            <div class="stack-name">Fitness Trainer</div>
+            <div class="stack-meta">Health • India & Global</div>
+          </div>
+        </div>
+        <div class="stack-tools">
+          <span class="tool-pill">Cult.fit</span>
+          <span class="tool-pill">MyFitnessPal</span>
+          <span class="tool-pill">Notion</span>
+          <span class="tool-pill">+5 more</span>
+        </div>
+        <div class="stack-footer">
+          <div class="stack-users"><strong>980</strong> trainers use this</div>
+          <button class="view-btn">View Stack →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="how-section">
+    <div class="how-inner">
+      <h2 class="how-title">How UpgradeStacks Works</h2>
+      <div class="how-grid">
+        <div class="how-card">
+          <div class="how-num">01</div>
+          <h3>Find Your Stack</h3>
+          <p>Search your profession or goal. Land on a curated page built for exactly who you are.</p>
+        </div>
+        <div class="how-card">
+          <div class="how-num">02</div>
+          <h3>Explore Your Tools</h3>
+          <p>Every tool is rated, priced, and explained. See what's free, what's worth paying for.</p>
+        </div>
+        <div class="how-card">
+          <div class="how-num">03</div>
+          <h3>Save & Customize</h3>
+          <p>Build your personal stack. Add or remove tools. Track your upgrade journey over time.</p>
+        </div>
+        <div class="how-card">
+          <div class="how-num">04</div>
+          <h3>Share With Others</h3>
+          <p>Get a shareable link. Share your stack with colleagues, students, or followers.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ════════════ STACK PAGE ════════════ -->
+<div id="page-stack" class="page">
+
+  <div class="stack-page-hero">
+    <div class="stack-hero-inner">
+      <button class="back-btn" onclick="showPage('home')">← Back to all stacks</button>
+      <div class="stack-big-icon" id="stack-icon">🎨</div>
+      <h1 class="stack-page-title" id="stack-title">Graphic Designer Stack</h1>
+      <p class="stack-page-desc" id="stack-desc">The complete toolkit for graphic designers in India and globally — design tools, productivity apps, learning resources, and income platforms used by 3,240+ designers.</p>
+      <div class="stack-page-meta">
+        <div class="meta-badge"><strong id="stack-users">3,240</strong>&nbsp;people use this</div>
+        <div class="meta-badge">⭐ <strong>4.8</strong>&nbsp;/ 5 rating</div>
+        <div class="meta-badge">Updated <strong>May 2026</strong></div>
+        <div class="meta-badge" id="stack-region">🇮🇳 India + Global</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="stack-content">
+    <div class="tools-section" id="tools-container"></div>
+
+    <div class="stack-sidebar">
+      <div class="sidebar-card">
+        <h3>Share This Stack</h3>
+        <button class="share-btn primary" onclick="copyLink()">🔗 Copy Stack Link</button>
+        <button class="share-btn secondary">📤 Share on WhatsApp</button>
+        <button class="share-btn secondary">💾 Save to My Profile</button>
+      </div>
+
+      <div class="sidebar-card">
+        <h3>Community Ratings</h3>
+        <div class="rating-row"><span>Overall</span><span class="rating-stars">★★★★★</span></div>
+        <div class="rating-row"><span>Accuracy</span><span class="rating-stars">★★★★☆</span></div>
+        <div class="rating-row"><span>Completeness</span><span class="rating-stars">★★★★★</span></div>
+        <div class="rating-row"><span>India Relevant</span><span class="rating-stars">★★★★★</span></div>
+      </div>
+
+      <div class="sidebar-card">
+        <h3>🛠 Submit a Missing Tool</h3>
+        <div class="submit-form">
+          <input type="text" placeholder="Tool name" />
+          <input type="url" placeholder="Tool website URL" />
+          <select>
+            <option value="">Select category...</option>
+            <option>Design</option>
+            <option>Productivity</option>
+            <option>Learning</option>
+            <option>Earning</option>
+            <option>Community</option>
+          </select>
+          <textarea rows="2" placeholder="Why is this tool useful for this stack?"></textarea>
+          <button class="submit-btn" onclick="submitTool()">Submit Tool →</button>
+        </div>
+      </div>
+
+      <div class="sidebar-card">
+        <h3>📬 Stack Updates</h3>
+        <p style="font-size:0.82rem;color:var(--muted);margin-bottom:1rem;line-height:1.5">Get notified when new tools are added to this stack.</p>
+        <input type="email" placeholder="Your email" style="width:100%;padding:10px 14px;border:1.5px solid var(--border);border-radius:10px;font-family:'DM Sans',sans-serif;font-size:0.85rem;margin-bottom:0.75rem;outline:none;" />
+        <button class="submit-btn" onclick="showToast('✅ You\'ll get stack updates!')">Subscribe Free</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <strong>UpgradeStacks.com</strong> — The Complete Stack for Every Type of Person<br>
+  <span style="font-size:0.75rem;margin-top:0.5rem;display:block">Built to help people find the right tools. Always free. Community powered.</span>
+</footer>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const STACKS = {
+  'graphic-designer': {
+    icon: '🎨', title: 'Graphic Designer Stack',
+    desc: 'The complete toolkit for graphic designers in India and globally — design tools, productivity apps, learning resources, and income platforms used by 3,240+ designers.',
+    users: '3,240', region: '🇮🇳 India + Global',
+    categories: [
+      { label: '🎨 Design Tools', tools: [
+        { emoji:'🖊', name:'Figma', desc:'Best tool for UI/UX and graphic design. Real-time collaboration, free for individuals.', price:'Free', paid:false, importance:'essential' },
+        { emoji:'🖼', name:'Canva', desc:'Quick graphics, social media posts, presentations. India pricing ₹4,000/year for Pro.', price:'Free / ₹4k/yr', paid:true, importance:'essential' },
+        { emoji:'🎭', name:'Adobe Creative Cloud', desc:'Industry standard — Photoshop, Illustrator, InDesign. Required for professional client work.', price:'₹3,500/mo', paid:true, importance:'recommended' },
+      ]},
+      { label: '⚡ Productivity', tools: [
+        { emoji:'📋', name:'Notion', desc:'Manage client projects, briefs, and deadlines in one place. Free for individuals.', price:'Free', paid:false, importance:'recommended' },
+        { emoji:'⏱', name:'Toggl Track', desc:'Track billable hours for freelance clients. Essential for accurate invoicing.', price:'Free', paid:false, importance:'optional' },
+      ]},
+      { label: '💰 Earn Money', tools: [
+        { emoji:'🌐', name:'Behance', desc:'Portfolio platform owned by Adobe. Upload your work and get discovered by clients globally.', price:'Free', paid:false, importance:'essential' },
+        { emoji:'💼', name:'Fiverr', desc:'Freelance marketplace. India designers earn ₹2,000–₹50,000 per project.', price:'Free to join', paid:false, importance:'recommended' },
+        { emoji:'🏪', name:'Creative Market', desc:'Sell design templates, fonts, and graphics. Passive income once uploaded.', price:'Free to sell', paid:false, importance:'optional' },
+      ]},
+      { label: '📚 Learn & Grow', tools: [
+        { emoji:'🎓', name:'Domestika', desc:'Best platform for design courses. Beautiful courses by real designers. Often on sale for ₹500.', price:'₹500/course', paid:true, importance:'recommended' },
+        { emoji:'▶️', name:'YouTube — Free Tutorials', desc:'Channels like Flux Academy, The Futur, and Ran Segall. Free and excellent.', price:'Free', paid:false, importance:'optional' },
+      ]},
+    ]
+  },
+  'ca-student': {
+    icon: '📊', title: 'CA Student Stack',
+    desc: 'The complete toolkit for CA Foundation, Inter, and Final students in India — accounting software, study resources, practice tools, and investment apps used by 5,820+ CA students.',
+    users: '5,820', region: '🇮🇳 India Specific',
+    categories: [
+      { label: '📒 Accounting & Tax', tools: [
+        { emoji:'🧮', name:'Tally Prime', desc:'Industry standard accounting software. Every CA firm uses Tally. Must-know before placements.', price:'₹18,000 one-time', paid:true, importance:'essential' },
+        { emoji:'📑', name:'ClearTax', desc:'GST filing, ITR filing, and tax planning tools. Free for basic use.', price:'Free / Paid plans', paid:false, importance:'essential' },
+        { emoji:'📊', name:'Microsoft Excel', desc:'Advanced Excel is non-negotiable for CA work. Learn VLOOKUP, pivot tables, financial modelling.', price:'₹4,200/yr (Office)', paid:true, importance:'essential' },
+      ]},
+      { label: '📚 Study Resources', tools: [
+        { emoji:'🎯', name:'ICAI Study Material', desc:'Official ICAI modules and mock tests. Free for enrolled students. Start here always.', price:'Free', paid:false, importance:'essential' },
+        { emoji:'🎬', name:'Unacademy CA', desc:'Video lectures by top CA faculties. Good for conceptual clarity and revision.', price:'₹8,000–₹25,000/yr', paid:true, importance:'recommended' },
+      ]},
+      { label: '💹 Investing (Start Now)', tools: [
+        { emoji:'📈', name:'Zerodha', desc:'Best discount broker in India. CAs should understand markets. Free demat account.', price:'Free account', paid:false, importance:'recommended' },
+        { emoji:'🌱', name:'Groww', desc:'Mutual funds made simple. Start SIP with ₹500/month while studying.', price:'Free', paid:false, importance:'optional' },
+      ]},
+    ]
+  },
+  'youtuber': {
+    icon: '🎬', title: 'YouTuber Stack',
+    desc: 'The complete toolkit for YouTube creators in India — video editing, thumbnail design, channel growth, and monetization tools used by 2,110+ creators.',
+    users: '2,110', region: '🇮🇳 India + Global',
+    categories: [
+      { label: '🎞 Video Editing', tools: [
+        { emoji:'🎬', name:'DaVinci Resolve', desc:'Professional video editing, color grading, and audio mastering. Completely free. Industry standard.', price:'Free', paid:false, importance:'essential' },
+        { emoji:'✂️', name:'CapCut', desc:'Mobile-first editing for quick reels and shorts. Free and extremely easy to use.', price:'Free', paid:false, importance:'recommended' },
+      ]},
+      { label: '🖼 Thumbnails & Graphics', tools: [
+        { emoji:'🎨', name:'Canva', desc:'Make YouTube thumbnails in minutes. Templates, fonts, and brand kit included.', price:'Free / ₹4k/yr', paid:false, importance:'essential' },
+        { emoji:'🖊', name:'Photoshop', desc:'For high-quality custom thumbnails. Steeper learning curve but professional results.', price:'₹1,800/mo', paid:true, importance:'optional' },
+      ]},
+      { label: '📈 Channel Growth', tools: [
+        { emoji:'🔧', name:'TubeBuddy', desc:'Keyword research, tag suggestions, A/B thumbnail testing. Free plan is useful.', price:'Free / $5/mo', paid:false, importance:'essential' },
+        { emoji:'📊', name:'vidIQ', desc:'Competitor analysis, trending topics, and daily video ideas. Pairs well with TubeBuddy.', price:'Free / $7.5/mo', paid:false, importance:'recommended' },
+      ]},
+      { label: '💰 Monetize', tools: [
+        { emoji:'🤝', name:'Gumroad', desc:'Sell digital products — presets, templates, ebooks — directly to your audience.', price:'Free (5% cut)', paid:false, importance:'recommended' },
+        { emoji:'📧', name:'Mailchimp', desc:'Build an email list. Your YouTube channel can get deleted — your email list cannot.', price:'Free up to 500', paid:false, importance:'recommended' },
+      ]},
+    ]
+  },
+  'developer': {
+    icon: '💻', title: 'Software Developer Stack',
+    desc: 'The complete toolkit for software developers — coding tools, learning platforms, deployment, and career resources used by 7,440+ developers worldwide.',
+    users: '7,440', region: '🌍 Global',
+    categories: [
+      { label: '🖥 Coding Tools', tools: [
+        { emoji:'💻', name:'VS Code', desc:'Most popular code editor. Free, fast, and has 30,000+ extensions. Non-negotiable.', price:'Free', paid:false, importance:'essential' },
+        { emoji:'🐙', name:'GitHub', desc:'Version control, portfolio, and collaboration. Your GitHub profile IS your resume.', price:'Free', paid:false, importance:'essential' },
+        { emoji:'🐳', name:'Docker', desc:'Containerize your apps. Every serious developer needs Docker basics.', price:'Free', paid:false, importance:'recommended' },
+      ]},
+      { label: '🚀 Deployment', tools: [
+        { emoji:'▲', name:'Vercel', desc:'Deploy frontend apps in seconds. Free tier is generous. Perfect for Next.js.', price:'Free', paid:false, importance:'essential' },
+        { emoji:'🌊', name:'DigitalOcean', desc:'Affordable cloud hosting. ₹400/month droplet runs most side projects fine.', price:'From $4/mo', paid:true, importance:'recommended' },
+      ]},
+      { label: '📚 Learning', tools: [
+        { emoji:'🆓', name:'freeCodeCamp', desc:'Full curriculum from HTML to machine learning. 100% free, project-based, certificate included.', price:'Free', paid:false, importance:'essential' },
+        { emoji:'⚔️', name:'LeetCode', desc:'Practice DSA problems for FAANG and product company interviews. Free tier is sufficient.', price:'Free / $35/mo', paid:false, importance:'recommended' },
+      ]},
+      { label: '🧠 Productivity', tools: [
+        { emoji:'📝', name:'Notion', desc:'Document your projects, learnings, and ideas. Build a second brain as you code.', price:'Free', paid:false, importance:'recommended' },
+        { emoji:'🤖', name:'Claude / ChatGPT', desc:'AI coding assistant. Debug, explain concepts, and generate boilerplate 10x faster.', price:'Free / $20/mo', paid:false, importance:'essential' },
+      ]},
+    ]
+  },
+  'startup-founder': {
+    icon: '🚀', title: 'Startup Founder Stack',
+    desc: 'The complete toolkit for startup founders in India — from idea validation to launch, payments, and growth. Used by 1,890+ founders.',
+    users: '1,890', region: '🇮🇳 India + Global',
+    categories: [
+      { label: '🏗 Build', tools: [
+        { emoji:'🌐', name:'Framer', desc:'Build beautiful websites without code. Best no-code tool for landing pages in 2026.', price:'Free / $15/mo', paid:false, importance:'essential' },
+        { emoji:'💬', name:'Supabase', desc:'Open source Firebase alternative. Database, auth, and APIs — all free to start.', price:'Free', paid:false, importance:'recommended' },
+      ]},
+      { label: '💳 Payments', tools: [
+        { emoji:'💰', name:'Razorpay', desc:'Best payment gateway for India. UPI, cards, netbanking. Easy integration. Free to start.', price:'2% per transaction', paid:false, importance:'essential' },
+        { emoji:'🌍', name:'Stripe', desc:'For international payments. Pair with Razorpay if you have global customers.', price:'2.9% + 30¢', paid:false, importance:'recommended' },
+      ]},
+      { label: '📢 Marketing', tools: [
+        { emoji:'📧', name:'Mailchimp', desc:'Email marketing for your waitlist and customers. Free up to 500 contacts.', price:'Free', paid:false, importance:'essential' },
+        { emoji:'🎨', name:'Canva', desc:'Make social media posts, pitch decks, and marketing materials fast.', price:'Free / ₹4k/yr', paid:false, importance:'recommended' },
+      ]},
+      { label: '🤝 Team & Ops', tools: [
+        { emoji:'💬', name:'Slack', desc:'Team communication. Free tier works fine for early-stage startups.', price:'Free', paid:false, importance:'recommended' },
+        { emoji:'📋', name:'Notion', desc:'Company wiki, roadmap, meeting notes. Replace 5 tools with one.', price:'Free', paid:false, importance:'essential' },
+      ]},
+    ]
+  },
+  'fitness-trainer': {
+    icon: '💪', title: 'Fitness Trainer Stack',
+    desc: 'The complete toolkit for fitness trainers in India — client management, workout apps, nutrition tracking, and business tools used by 980+ trainers.',
+    users: '980', region: '🇮🇳 India + Global',
+    categories: [
+      { label: '🏋 Training Tools', tools: [
+        { emoji:'💪', name:'Cult.fit for Trainers', desc:'Partner with Cult.fit to get clients or build your own bootcamp. India-specific.', price:'Free to partner', paid:false, importance:'recommended' },
+        { emoji:'📊', name:'Strong App', desc:'Log workouts, build programs for clients. Simple, no-nonsense interface.', price:'Free / $10/mo', paid:false, importance:'essential' },
+      ]},
+      { label: '🥗 Nutrition', tools: [
+        { emoji:'🍎', name:'HealthifyMe', desc:'India-specific calorie tracking with Indian food database. Share diet plans with clients.', price:'Free / ₹999/mo', paid:false, importance:'essential' },
+        { emoji:'📱', name:'MyFitnessPal', desc:'Global food database. Best for clients eating international food.', price:'Free', paid:false, importance:'recommended' },
+      ]},
+      { label: '💼 Business', tools: [
+        { emoji:'📸', name:'Instagram', desc:'Your portfolio is your feed. Before/after transformations, workout reels, nutrition tips.', price:'Free', paid:false, importance:'essential' },
+        { emoji:'📋', name:'Notion', desc:'Manage client onboarding forms, workout plans, and progress tracking.', price:'Free', paid:false, importance:'recommended' },
+      ]},
+    ]
+  }
+};
+
+function showPage(page) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-' + page).classList.add('active');
+  window.scrollTo(0, 0);
+}
+
+function loadStack(key) {
+  const s = STACKS[key];
+  if (!s) return;
+  document.getElementById('stack-icon').textContent = s.icon;
+  document.getElementById('stack-title').textContent = s.title;
+  document.getElementById('stack-desc').textContent = s.desc;
+  document.getElementById('stack-users').textContent = s.users;
+  document.getElementById('stack-region').textContent = s.region;
+
+  const container = document.getElementById('tools-container');
+  container.innerHTML = '';
+
+  s.categories.forEach(cat => {
+    const block = document.createElement('div');
+    block.className = 'tool-category-block';
+    block.innerHTML = `<div class="tool-category-label">${cat.label}</div>`;
+
+    cat.tools.forEach(tool => {
+      const importanceClass = tool.importance === 'essential' ? '' : tool.importance === 'recommended' ? 'rec' : 'opt';
+      const importanceLabel = tool.importance === 'essential' ? 'Essential' : tool.importance === 'recommended' ? 'Recommended' : 'Optional';
+      const card = document.createElement('div');
+      card.className = 'tool-card';
+      card.innerHTML = `
+        <div class="tool-logo">${tool.emoji}</div>
+        <div class="tool-info">
+          <div class="tool-name">${tool.name} <span class="importance-badge ${importanceClass}">${importanceLabel}</span></div>
+          <div class="tool-desc">${tool.desc}</div>
+        </div>
+        <div class="tool-right">
+          <div class="tool-price ${tool.paid ? 'paid' : ''}">${tool.price}</div>
+          <a class="tool-link" href="#" onclick="showToast('Opening ${tool.name}...')">Visit →</a>
+        </div>
+      `;
+      block.appendChild(card);
+    });
+
+    container.appendChild(block);
+  });
+
+  showPage('stack');
+}
+
+function doSearch() {
+  const val = document.getElementById('search-input').value.toLowerCase();
+  const map = {
+    'graphic': 'graphic-designer', 'design': 'graphic-designer',
+    'ca': 'ca-student', 'chartered': 'ca-student', 'accountant': 'ca-student',
+    'youtube': 'youtuber', 'creator': 'youtuber', 'video': 'youtuber',
+    'developer': 'developer', 'coding': 'developer', 'programmer': 'developer', 'code': 'developer',
+    'startup': 'startup-founder', 'founder': 'startup-founder', 'entrepreneur': 'startup-founder',
+    'fitness': 'fitness-trainer', 'trainer': 'fitness-trainer', 'gym': 'fitness-trainer',
+  };
+  for (const [k, v] of Object.entries(map)) {
+    if (val.includes(k)) { loadStack(v); return; }
+  }
+  showToast('Showing closest match — Graphic Designer Stack');
+  loadStack('graphic-designer');
+}
+
+function copyLink() {
+  navigator.clipboard.writeText('https://upgradestacks.com/stack/graphic-designer').catch(()=>{});
+  showToast('✅ Stack link copied to clipboard!');
+}
+
+function submitTool() {
+  showToast('✅ Tool submitted! We\'ll review and add it soon.');
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2800);
+}
+
+document.getElementById('search-input').addEventListener('keydown', e => {
+  if (e.key === 'Enter') doSearch();
+});
+</script>
+</body>
+</html>
