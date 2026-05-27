@@ -23,10 +23,10 @@ const CATEGORIES = [
 ]
 
 const HINTS = [
-  { label: '🎨 Graphic Designer', slug: 'graphic-designer' },
-  { label: '📊 CA Student', slug: 'ca-student' },
+  { label: '📊 Chartered Accountant', slug: 'chartered-accountant' },
+  { label: '💻 Certified Software Engineer', slug: 'certified-software-engineer' },
+  { label: '📈 Certified Data Analyst', slug: 'certified-data-analyst' },
   { label: '🎬 YouTuber', slug: 'youtuber' },
-  { label: '💻 Developer', slug: 'software-developer' },
   { label: '🚀 Startup Founder', slug: 'startup-founder' },
   { label: '💪 Fitness Trainer', slug: 'fitness-trainer' },
 ]
