@@ -10,11 +10,16 @@ export const revalidate = 86400
 
 export async function generateStaticParams() {
   const categories = await getAllCategories()
-  return categories.map(cat => ({ category: cat.toLowerCase().replace(/\s+/g, '-') }))
+  return categories.map(cat => ({
+    category: cat.toLowerCase().replace(/\s+/g, '-').replace(/[&]/g, 'and')
+  }))
 }
 
 export async function generateMetadata({ params }: { params: { category: string } }): Promise<Metadata> {
-  const name = params.category.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase())
+  const name = params.category
+    .replace(/-/g, ' ')
+    .replace(/\band\b/gi, '&')
+    .replace(/\b\w/g, c => c.toUpperCase())
   return {
     title: `${name} Stacks — Best Tools for ${name} Professionals`,
     description: `Browse all ${name} profession stacks on UpgradeStacks. Find curated tools, apps, and resources.`,
@@ -23,7 +28,10 @@ export async function generateMetadata({ params }: { params: { category: string 
 
 export default async function CategoryPage({ params }: { params: { category: string } }) {
   // Convert URL slug back to category name
-  const categoryName = params.category.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase())
+  const categoryName = params.category
+    .replace(/-/g, ' ')
+    .replace(/\band\b/gi, '&')
+    .replace(/\b\w/g, c => c.toUpperCase())
   const professions = await getProfessionsByCategory(categoryName)
 
   if (professions.length === 0) notFound()
