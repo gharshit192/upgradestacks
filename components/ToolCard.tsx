@@ -1,4 +1,6 @@
 // components/ToolCard.tsx
+'use client'
+
 import Link from 'next/link'
 import type { StackConnection, Tool } from '@/lib/types'
 import clsx from 'clsx'
