@@ -1,5 +1,6 @@
 // app/layout.tsx
 import type { Metadata } from 'next'
+import Script from 'next/script'
 import { DM_Sans, Sora } from 'next/font/google'
 import './globals.css'
 
@@ -43,8 +44,29 @@ export const metadata: Metadata = {
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "UpgradeStacks",
+    "url": "https://upgradestacks.com",
+    "description": "Find the exact tools, apps, and resources used by professionals in any field. 326 professions covered. Free forever.",
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": "https://upgradestacks.com/stack/{search_term_string}",
+      "query-input": "required name=search_term_string"
+    }
+  }
+
   return (
     <html lang="en" className={`${dmSans.variable} ${sora.variable}`}>
+      <head>
+        <Script
+          id="website-schema"
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+          strategy="afterInteractive"
+        />
+      </head>
       <body className="bg-[#fafaf8] text-[#0F0E17] font-sans antialiased">
         {children}
       </body>
