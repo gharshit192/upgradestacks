@@ -33,10 +33,10 @@ const CATEGORIES = [
 const HINTS = [
   { label: '📊 Chartered Accountant', slug: 'chartered-accountant' },
   { label: '💻 Software Engineer', slug: 'software-engineer' },
+  { label: '🎨 Graphic Designer', slug: 'graphic-designer' },
   { label: '📈 Data Analyst', slug: 'data-analyst' },
   { label: '🎬 YouTuber', slug: 'youtuber' },
   { label: '🚀 Startup Founder', slug: 'startup-founder' },
-  { label: '💪 Fitness Trainer', slug: 'fitness-trainer' },
 ]
 
 export default async function HomePage() {

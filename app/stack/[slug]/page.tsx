@@ -40,7 +40,9 @@ export async function generateMetadata(
   const { profession } = stack
 
   return {
-    title: profession.seo_title || `${profession.name} Stack — Best Tools & Apps 2026`,
+    title: {
+      absolute: profession.seo_title || `${profession.name} Stack — Best Tools & Apps 2026 | UpgradeStacks`,
+    },
     description: profession.seo_description || profession.description,
     openGraph: {
       title: profession.seo_title || profession.name,
@@ -208,7 +210,7 @@ export default async function StackPage({ params }: { params: { slug: string } }
                   className="block w-full text-center py-2 rounded-full border border-gray-200
                              text-sm font-semibold hover:border-accent hover:text-accent transition-all"
                 >
-                  📤 Share on WhatsApp
+                  💬 Share on WhatsApp
                 </a>
               </div>
             </div>
