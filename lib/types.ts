@@ -20,6 +20,10 @@ export interface Profession {
   rating: number
   created_at: string
   updated_at: string
+  // Stack enrichment fields
+  workflow_description?: string | null
+  skill_level?: 'Beginner' | 'Intermediate' | 'Advanced' | null
+  budget_level?: 'Free' | 'Free + Paid' | 'Premium' | 'Enterprise' | null
 }
 
 export interface Tool {
@@ -42,6 +46,15 @@ export interface Tool {
   verified: boolean
   rating: number
   created_at: string
+  // Affiliate fields
+  affiliate_link?: string | null
+  affiliate_provider?: 'PartnerStack' | 'Impact' | 'Direct' | 'Amazon Associates' | 'Rakuten' | 'CJ Affiliate' | 'Other' | null
+  commission_type?: 'Recurring' | 'One-time' | 'Variable' | null
+  commission_percentage?: number | null
+  affiliate_enabled?: boolean
+  // Stack enrichment fields
+  is_ai_tool?: boolean | null
+  learning_resource?: boolean | null
 }
 
 export interface StackConnection {
@@ -80,4 +93,13 @@ export interface ToolSubmission {
 export interface EmailSubscriber {
   email: string
   profession_slug: string
+}
+
+export interface ToolAlternative {
+  id: string
+  tool_id: string
+  alternative_tool_id: string
+  reason: string
+  // Joined from tools table
+  alternative_tool?: Tool
 }
