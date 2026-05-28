@@ -16,10 +16,10 @@ const CATEGORIES = [
   { icon: '💻', name: 'Tech & Dev', slug: 'technology', count: '99+' },
   { icon: '📊', name: 'Finance', slug: 'finance', count: '10+' },
   { icon: '🚀', name: 'Business', slug: 'business', count: '49+' },
-  { icon: '🎬', name: 'Creator', slug: 'creator', count: '8+' },
   { icon: '💪', name: 'Health', slug: 'health', count: '8+' },
   { icon: '📚', name: 'Education', slug: 'education', count: '8+' },
   { icon: '🏠', name: 'Lifestyle', slug: 'lifestyle', count: '8+' },
+  { icon: '📢', name: 'Marketing', slug: 'marketing', count: '8+' },
 ]
 
 const HINTS = [
