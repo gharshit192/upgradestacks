@@ -10,11 +10,13 @@ import Footer from '@/components/Footer'
 import ToolCard from '@/components/ToolCard'
 import SubmitToolForm from '@/components/SubmitToolForm'
 import EmailSubscribe from '@/components/EmailSubscribe'
+import { ShareButton } from '@/components/ShareButton'
 import {
   getAllProfessionSlugs,
   getStackBySlug,
   getRelatedStacks,
 } from '@/lib/supabase'
+import { getEmojiForProfession } from '@/lib/emoji-map'
 
 // ── STATIC GENERATION ─────────────────────────────────────────────────
 // Next.js calls this at build time to pre-build ALL stack pages
@@ -55,15 +57,15 @@ export async function generateMetadata(
 // ── PAGE COMPONENT ────────────────────────────────────────────────────
 export default async function StackPage({ params }: { params: { slug: string } }) {
   // Fetch stack data — profession + all tools grouped by category
-  const [stack, related] = await Promise.all([
-    getStackBySlug(params.slug),
-    getRelatedStacks('', params.slug), // category filled after stack loads
-  ])
+  const stack = await getStackBySlug(params.slug)
 
   // If profession not found → 404 page
   if (!stack) notFound()
 
   const { profession, categories } = stack
+
+  // Fetch related stacks with correct category
+  const related = await getRelatedStacks(profession.category, params.slug)
 
   // JSON-LD structured data for Google
   const jsonLd = {
@@ -102,18 +104,34 @@ export default async function StackPage({ params }: { params: { slug: string } }
           </Link>
 
           <div className="text-5xl mb-4">
-            {profession.category === 'Creative' ? '🎨' :
-             profession.category === 'Finance' ? '📊' :
-             profession.category === 'Tech' ? '💻' :
-             profession.category === 'Business' ? '🚀' :
-             profession.category === 'Creator' ? '🎬' :
-             profession.category === 'Health' ? '💪' :
-             profession.category === 'Education' ? '📚' : '⭐'}
+            {getEmojiForProfession(profession.slug, profession.category)}
           </div>
 
           <h1 className="font-display font-extrabold text-4xl md:text-5xl mb-3">
             {profession.name} Stack
           </h1>
+
+          {/* Skill Level and Budget Level Badges */}
+          {(profession.skill_level || profession.budget_level) && (
+            <div className="flex flex-wrap gap-2 mb-4">
+              {profession.skill_level && (
+                <div className={`flex items-center gap-2 px-3 py-1.5 rounded-full text-sm font-medium ${
+                  profession.skill_level === 'Beginner' ? 'bg-green-500/20 text-green-300' :
+                  profession.skill_level === 'Intermediate' ? 'bg-yellow-500/20 text-yellow-300' :
+                  'bg-red-500/20 text-red-300'
+                }`}>
+                  {profession.skill_level === 'Beginner' ? '🟢' :
+                   profession.skill_level === 'Intermediate' ? '🟡' : '🔴'}
+                  {' '}{profession.skill_level}
+                </div>
+              )}
+              {profession.budget_level && (
+                <div className="flex items-center gap-2 bg-white/10 px-3 py-1.5 rounded-full text-sm">
+                  💰 {profession.budget_level}
+                </div>
+              )}
+            </div>
+          )}
 
           <p className="text-gray-300 max-w-2xl leading-relaxed mb-5">
             {profession.description}
@@ -255,22 +273,5 @@ export default async function StackPage({ params }: { params: { slug: string } }
 
       <Footer />
     </>
-  )
-}
-
-// Client component for copy-to-clipboard
-function ShareButton({ slug, name }: { slug: string; name: string }) {
-  // This is a server component file so we inline a simple button
-  // For full client interactivity, extract to separate file
-  return (
-    <button
-      onClick={undefined}
-      data-url={`https://upgradestacks.com/stack/${slug}`}
-      className="w-full bg-accent text-white py-2 rounded-full text-sm font-semibold
-                 hover:opacity-90 transition-opacity"
-      // In production: add onClick to copy URL via navigator.clipboard
-    >
-      🔗 Copy Stack Link
-    </button>
   )
 }

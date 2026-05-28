@@ -2,14 +2,22 @@
 // Homepage — Server Component (fast, SEO-friendly)
 
 import { Suspense } from 'react'
+import type { Metadata } from 'next'
 import Link from 'next/link'
 import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
 import SearchBar from '@/components/SearchBar'
 import { getAllProfessions, getFeaturedProfessions, getSiteStats } from '@/lib/supabase'
+import { getEmojiForProfession } from '@/lib/emoji-map'
 
 // Revalidate every 24 hours
 export const revalidate = 86400
+
+export const metadata: Metadata = {
+  alternates: {
+    canonical: 'https://upgradestacks.com',
+  },
+}
 
 const CATEGORIES = [
   { icon: '🎨', name: 'Creative', slug: 'creative', count: '52+' },
@@ -24,8 +32,8 @@ const CATEGORIES = [
 
 const HINTS = [
   { label: '📊 Chartered Accountant', slug: 'chartered-accountant' },
-  { label: '💻 Certified Software Engineer', slug: 'certified-software-engineer' },
-  { label: '📈 Certified Data Analyst', slug: 'certified-data-analyst' },
+  { label: '💻 Software Engineer', slug: 'software-engineer' },
+  { label: '📈 Data Analyst', slug: 'data-analyst' },
   { label: '🎬 YouTuber', slug: 'youtuber' },
   { label: '🚀 Startup Founder', slug: 'startup-founder' },
   { label: '💪 Fitness Trainer', slug: 'fitness-trainer' },
@@ -143,12 +151,7 @@ export default async function HomePage() {
               <div className="absolute top-0 left-0 right-0 h-0.5 bg-accent" />
               <div className="flex items-center gap-3 mb-3">
                 <div className="w-12 h-12 rounded-xl bg-orange-50 flex items-center justify-center text-2xl">
-                  {prof.category === 'Creative' ? '🎨' :
-                   prof.category === 'Finance' ? '📊' :
-                   prof.category === 'Tech' ? '💻' :
-                   prof.category === 'Business' ? '🚀' :
-                   prof.category === 'Creator' ? '🎬' :
-                   prof.category === 'Health' ? '💪' : '⭐'}
+                  {getEmojiForProfession(prof.slug, prof.category)}
                 </div>
                 <div>
                   <div className="font-display font-bold text-sm text-primary group-hover:text-accent transition-colors">

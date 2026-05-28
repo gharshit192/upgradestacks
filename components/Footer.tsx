@@ -46,7 +46,7 @@ export default function Footer() {
 
         <div className="border-t border-white/10 pt-8 flex flex-col md:flex-row items-center justify-center gap-4">
           <p className="text-gray-500 text-xs">
-            © {new Date().getFullYear()} UpgradeStacks.com — All right reserved.
+            © {new Date().getFullYear()} UpgradeStacks.com — All rights reserved.
           </p>
         </div>
       </div>
